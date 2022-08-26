@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>快速解决五十音</title>
+</head>
+<style>
+  body{
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .form{
+    /* display: none; */
+  }
+
+  .word{
+    font-size: 100px;
+  }
+
+  .main-shell{
+    display: none;
+  }
+</style>
+<body>
+
+  <div class="form">
+    <label>要背的: </label>
+    <textarea cols='50' rows="3">あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろんアイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロン</textarea>
+    <br/>
+    <button class="submit" onclick="start()">提交 (1)</button>
+    <button class="submit-all" onclick="submitAll()">全背 (2)</button>
+  </div>
+
+  <div class="main-shell">
+    <span class="word">[]</span>
+    <span class="number">(1/50)</span>
+    <br/>
+    罗马音：<span class="roman">（隐藏）</span>
+    <br/>
+    <button class="know" onclick="nextRound(true)">会 (1)</button>
+    <button class="dont-konw" onclick="nextRound(false)">不会 (2)</button>
+    <button class="dont-konw" onclick="showRoman()">查看罗马音(3)</button>
+  </div>
+</body>
+<script>
+  const DEFAULT_WORDS = 'あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろんアイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロン'
+  
+  let mode = 'input' // 'input' 'start'
+  let wordArr = []
+  let round = 0
+  let dontKnowArr = [] 
+
+  const textareaDOM = document.querySelector('textarea')
+  const formDOM = document.querySelector('.form')
+  const mainDOM = document.querySelector('.main-shell')
+  const numberDOM = document.querySelector('.number')
+  const wordDOM = document.querySelector('.word')
+  const romanDOM = document.querySelector('.roman')
+
+  function submitAll(){
+    textareaDOM.value = DEFAULT_WORDS
+    start()
+  }
+
+  function start(){
+    wordArr = textareaDOM.value.split('')
+    wordArr.sort(()=>Math.random() - 0.5)
+    mode = 'start'
+    formDOM.style.display = 'none'
+    mainDOM.style.display = 'block'
+    round = 0
+    dontKnowArr = []
+    numberDOM.innerHTML = `(${round + 1}/${wordArr.length})`
+    wordDOM.innerHTML = wordArr[round]
+    romanDOM.innerHTML = '（隐藏）'
+  }
+
+  function nextRound(flag){
+    if(!flag) dontKnowArr.push(wordArr[round])
+    round++
+    if(round >= wordArr.length) {
+      mode = 'input'
+      formDOM.style.display = 'block'
+      mainDOM.style.display = 'none'
+      textareaDOM.value = dontKnowArr.join('')
+    }
+    numberDOM.innerHTML = `(${round + 1}/${wordArr.length})`
+    wordDOM.innerHTML = wordArr[round]
+    romanDOM.innerHTML = '（隐藏）'
+  }
+
+  function showRoman(){
+    romanDOM.innerHTML = romanMap[wordArr[round]]
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if(mode === 'start'){
+      if (e.code === 'Digit1') nextRound(true)
+      else if(e.code === 'Digit2') nextRound(false)
+      else if(e.code === 'Digit3') showRoman()
+    }else if(mode === 'input'){
+      if (e.code === 'Digit1') start()
+      else if(e.code === 'Digit2') submitAll()
+    }
+
+  })
+
+  const romanMap = {
+    "あ": "a",
+    "ア": "a",
+    "い": "i",
+    "イ": "i",
+    "う": "u",
+    "ウ": "u",
+    "え": "e",
+    "エ": "e",
+    "お": "o",
+    "オ": "o",
+    "か": "ka",
+    "カ": "ka",
+    "き": "ki",
+    "キ": "ki",
+    "く": "ku",
+    "ク": "ku",
+    "け": "ke",
+    "ケ": "ke",
+    "こ": "ko",
+    "コ": "ko",
+    "さ": "sa",
+    "サ": "sa",
+    "し": "shi",
+    "シ": "shi",
+    "す": "su",
+    "ス": "su",
+    "せ": "se",
+    "セ": "se",
+    "そ": "so",
+    "ソ": "so",
+    "た": "ta",
+    "タ": "ta",
+    "ち": "chi",
+    "チ": "chi",
+    "つ": "tsu",
+    "ツ": "tsu",
+    "て": "te",
+    "テ": "te",
+    "と": "to",
+    "ト": "to",
+    "な": "na",
+    "ナ": "na",
+    "に": "ni",
+    "ニ": "ni",
+    "ぬ": "nu",
+    "ヌ": "nu",
+    "ね": "ne",
+    "ネ": "ne",
+    "の": "no",
+    "ノ": "no",
+    "は": "ha",
+    "ハ": "ha",
+    "ひ": "hi",
+    "ヒ": "hi",
+    "ふ": "fu",
+    "フ": "fu",
+    "へ": "he",
+    "ヘ": "he",
+    "ほ": "ho",
+    "ホ": "ho",
+    "ま": "ma",
+    "マ": "ma",
+    "み": "mi",
+    "ミ": "mi",
+    "む": "mu",
+    "ム": "mu",
+    "め": "me",
+    "メ": "me",
+    "も": "mo",
+    "モ": "mo",
+    "や": "ya",
+    "ヤ": "ya",
+    "ゆ": "yu",
+    "ユ": "yu",
+    "よ": "yo",
+    "ヨ": "yo",
+    "ら": "ra",
+    "ラ": "ra",
+    "り": "ri",
+    "リ": "ri",
+    "る": "ru",
+    "ル": "ru",
+    "れ": "re",
+    "レ": "re",
+    "ろ": "ro",
+    "ロ": "ro",
+    "ん": "(n)",
+    "ン": "(n)"
+  }
+</script>
+</html>
