@@ -1,5 +1,7 @@
 # 在尽可能短的时间内建立五十音和罗马音的联系，快速记忆五十音
 
+# 演示地址
+https://lihaosen-222.github.io/MemorizeHiragana-Katakana/study.html
 # 操作
 - 通过键盘 1、2、3（非小键盘）快速操作，免除点鼠标的烦恼
 - 每次循环会记录不会的音，可以自由选择下一轮是否继续记忆
