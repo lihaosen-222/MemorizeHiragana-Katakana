@@ -17,10 +17,6 @@
     align-items: center;
   }
 
-  .form{
-    /* display: none; */
-  }
-
   .word{
     font-size: 100px;
   }
@@ -83,7 +79,7 @@
     romanDOM.innerHTML = '（隐藏）'
   }
 
-  function nextRound(flag){
+  const nextRound = throttle((flag)=>{
     if(!flag) dontKnowArr.push(wordArr[round])
     round++
     if(round >= wordArr.length) {
@@ -95,7 +91,7 @@
     numberDOM.innerHTML = `(${round + 1}/${wordArr.length})`
     wordDOM.innerHTML = wordArr[round]
     romanDOM.innerHTML = '（隐藏）'
-  }
+  }, 100)
 
   function showRoman(){
     romanDOM.innerHTML = romanMap[wordArr[round]]
@@ -202,6 +198,16 @@
     "ロ": "ro - 片",
     "ん": "(n)",
     "ン": "(n) - 片"
+  }
+
+  function throttle(fn, delay){
+    let last = 0
+    return function(){
+      const now = Date.now()
+      console.log(now)
+      if(now - last > delay) fn.apply(this, arguments)
+      last = now
+    }
   }
 </script>
 </html>
